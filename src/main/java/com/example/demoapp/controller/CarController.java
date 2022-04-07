@@ -5,6 +5,7 @@ import com.example.demoapp.response.CarResponse;
 import com.example.demoapp.service.CarService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,7 +16,9 @@ public class CarController {
 
     private final CarService service;
 
-    public CarController(CarService service) {this.service = service;}
+    public CarController(CarService service) {
+        this.service = service;
+    }
 
     @GetMapping
     public ResponseEntity<List<CarResponse>> getAll() {
@@ -28,9 +31,9 @@ public class CarController {
     }
 
     @PostMapping
-    public ResponseEntity<?> save(@RequestBody CarRequest user) {
-        service.save(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(user);
+    public ResponseEntity<?> save(@Validated @RequestBody CarRequest car) {
+        service.save(car);
+        return ResponseEntity.status(HttpStatus.CREATED).body(car);
     }
 
     @DeleteMapping(value = "/{id}")
@@ -40,8 +43,8 @@ public class CarController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<?> update(@PathVariable long id, @RequestBody CarRequest user) {
-        service.update(id, user);
+    public ResponseEntity<?> update(@PathVariable long id, @RequestBody CarRequest car) {
+        service.update(id, car);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
